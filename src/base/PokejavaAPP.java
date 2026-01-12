@@ -96,9 +96,6 @@ public class PokejavaAPP {
 						
 						System.out.println("  GRACIAS POR JUGAR! (ദ്ദി˙ᗜ˙)\n");
 						
-						System.out.println("  POKEJAVA v1.0");
-						System.out.println("  Desarrollado por: Unax Navarro Casado");
-						
 					}
 					
 			
@@ -398,6 +395,8 @@ public class PokejavaAPP {
 
 	private static void mostrarEquipos() {
 		// TODO Auto-generated method stub
+		
+		System.out.println("  Equipos guardados:");
 		
 		for (Equipo e : listaEquipos) {
 			
@@ -1020,8 +1019,8 @@ public class PokejavaAPP {
 		System.out.println("  ⟅5⟆ Mostrar un equipo especifico");
 		System.out.println("  ⟅6⟆ Crear nuevo equipo");
 		System.out.println("  ⟅7⟆ Borrar un equipo");
-		System.out.println("  ⟅8⟆ Modificar un equipo");
-		System.out.println("  ⟅9⟆ Batalla entre equipos pokemon");
+		System.out.println("  ⟅8⟆ Modificar un equipo (EN DESARROLLO)");
+		System.out.println("  ⟅9⟆ Batalla entre equipos pokemon (EN DESARROLLO)");
 		System.out.println("  ⟅0⟆ SALIR");
 		System.out.println("\n╚═══════════════════ •●• ═══════════════════╝\n");
 		
