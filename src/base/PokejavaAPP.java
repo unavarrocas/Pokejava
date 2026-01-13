@@ -720,7 +720,7 @@ public class PokejavaAPP {
 						
 					default:
 						
-						System.out.println("  [ERROR] Introduzca una opcion valida, vuelva a interntarlo...");
+						System.out.println("  [ERROR] Introduzca una opcion valida.");
 				
 				}
 				
@@ -742,6 +742,145 @@ public class PokejavaAPP {
 
 	private static void modificarEquipo() {
 		// TODO Auto-generated method stub
+		
+		String modEquipo = "";
+		
+		System.out.println("  Escriba el nombre del equipo que quiere modificar: ");
+		modEquipo = sc.nextLine();
+		
+		if (!comprobarEquipo(modEquipo)) {
+			
+			System.out.println("  [ERROR] El equipo proporcionado no existe.");
+			
+		} else {
+			
+			int opcionMenu = -1;
+			
+			while (opcionMenu != 0) {
+				
+				mostrarMenuModificarEquipo();
+				
+				System.out.println("  Elija una opcion: ");
+				opcionMenu = Integer.parseInt(sc.nextLine());
+				
+				switch (opcionMenu) {
+				
+					case 1:
+						
+						cambiarNombreEquipo(modEquipo);
+						
+						opcionMenu = 0;
+						
+						break;
+						
+					case 2:
+						
+						cambiarMiembrosEquipo(modEquipo);
+						
+						break;
+						
+					default:
+						
+						if (opcionMenu != 0) {
+							
+							System.out.println("  [ERROR] Introduzca una opcion valida.");
+							
+						}
+				
+				}
+				
+				guardarEquipos();
+				
+			}
+			
+		}
+		
+	}
+	
+	private static void cambiarNombreEquipo(String nomEquipo) {
+		// TODO Auto-generated method stub
+		
+		for (Equipo e : listaEquipos) {
+			
+			if (e.getNombreEquipo().equalsIgnoreCase(nomEquipo)) {
+				
+				String newNombreEquipo = "";
+				
+				System.out.println("  Introduzca el nuevo nombre del equipo: ");
+				newNombreEquipo = sc.nextLine();
+				
+				e.setNombreEquipo(newNombreEquipo);
+				
+				break;
+				
+			}
+			
+		}
+		
+	}
+
+	private static void cambiarMiembrosEquipo(String nomEquipo) {
+		// TODO Auto-generated method stub
+		
+		for (Equipo e : listaEquipos) {
+			
+			if (e.getNombreEquipo().equalsIgnoreCase(nomEquipo)) {
+				
+				boolean repetir = true;
+				
+				System.out.println(e.equipoToString());
+				
+				while (repetir) {
+					
+					String poke = "";
+					String salir = "";
+					
+					System.out.println("  Escriba el nombre del pokemon que quiere cambiar: ");
+					poke = sc.nextLine();
+					
+					for (Pokemon p : e.getMiembrosEquipo()) {
+						
+						if (p.getNombre().equalsIgnoreCase(poke)) {
+							
+							String newPoke = "";
+							
+							System.out.println("  Escriba el nombre del nuevo pokemon: ");
+							newPoke = sc.nextLine();
+							
+							if (!comprobarPokemon(newPoke)) {
+								
+								System.out.println("  [ERROR] El pokemon indicado no existe.");
+								
+							} else {
+								
+								p.setNombre(newPoke);
+								
+								System.out.println("  [INFO] Miembro del equipo actualizado.");
+								
+							}
+							
+							break;
+							
+						}
+						
+					}
+					
+					System.out.println("  Desea seguir cambiando pokemons?(S/N): ");
+					salir = sc.nextLine();
+					
+					if (salir.equalsIgnoreCase("N")) {
+						
+						repetir = false;
+						
+					}
+					
+				}
+				
+				break;
+				
+			}
+			
+		}
 		
 	}
 	
@@ -1019,7 +1158,7 @@ public class PokejavaAPP {
 		System.out.println("  ⟅5⟆ Mostrar un equipo especifico");
 		System.out.println("  ⟅6⟆ Crear nuevo equipo");
 		System.out.println("  ⟅7⟆ Borrar un equipo");
-		System.out.println("  ⟅8⟆ Modificar un equipo (EN DESARROLLO)");
+		System.out.println("  ⟅8⟆ Modificar un equipo");
 		System.out.println("  ⟅9⟆ Batalla entre equipos pokemon (EN DESARROLLO)");
 		System.out.println("  ⟅0⟆ SALIR");
 		System.out.println("\n╚═══════════════════ •●• ═══════════════════╝\n");
@@ -1042,6 +1181,16 @@ public class PokejavaAPP {
 		System.out.println("\n┌────── • CREACION EQUIPO • ──────┐\n");
 		System.out.println("  ⟅1⟆ Elegir miembros del equipo");
 		System.out.println("  ⟅2⟆ Generar equipo aleatorio");
+		System.out.println("  ⟅0⟆ SALIR");
+		System.out.println("\n└────── • CREACION EQUIPO • ──────┘\n");
+		
+	}
+	
+	private static void mostrarMenuModificarEquipo() {
+		
+		System.out.println("\n┌────── • MODIFICACION EQUIPO • ──────┐\n");
+		System.out.println("  ⟅1⟆ Cambiar nombre de equipo");
+		System.out.println("  ⟅2⟆ Cambiar pokemons del equipo");
 		System.out.println("  ⟅0⟆ SALIR");
 		System.out.println("\n└────── • CREACION EQUIPO • ──────┘\n");
 		

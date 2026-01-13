@@ -1,2 +1,2 @@
 NombreEquipo::NumeroDePokemon
-Unax::111,123,142
+EquipoUnax::111,123,142
