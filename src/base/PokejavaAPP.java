@@ -17,13 +17,9 @@ public class PokejavaAPP {
 		int opcionMenu = -1;
 		
 		cargaPokedex();
+		cargaEquipos();
 		
 		while (opcionMenu != 0) {
-			
-			// Vaciado y carga dentro del bucle para que los equipos se mantengan actualizados
-			
-			listaEquipos.clear();
-			cargaEquipos();
 			
 			mostrarMenuPrincipal();
 			
@@ -615,7 +611,7 @@ public class PokejavaAPP {
 			
 			newEquipo.agregarPokemon(listaPokemon.get(rand));
 			
-			System.out.println("  [INFO] " + listaPokemon.get(rand).getNombre() + " ha sido añadido a tu equipo.");
+			System.out.println("  [INFO] " + listaPokemon.get(rand).getNombre() + " ha sido añadido al equipo.");
 			
 		}
 		
@@ -797,6 +793,10 @@ public class PokejavaAPP {
 		
 	}
 	
+	// ------------------------------------------------
+	// Cambia el nombre del equipo pasado por parametro
+	// ------------------------------------------------
+	
 	private static void cambiarNombreEquipo(String nomEquipo) {
 		// TODO Auto-generated method stub
 		
@@ -818,6 +818,10 @@ public class PokejavaAPP {
 		}
 		
 	}
+	
+	// ----------------------------------------------------------------------------
+	// Permite cambiar los pokemons del equipo indicado hasta que el usuario quiera
+	// ----------------------------------------------------------------------------
 
 	private static void cambiarMiembrosEquipo(String nomEquipo) {
 		// TODO Auto-generated method stub
@@ -897,7 +901,419 @@ public class PokejavaAPP {
 	private static void peleaEquiposPokemon() {
 		// TODO Auto-generated method stub
 		
+		Equipo equipoAliado = new Equipo();
+		Equipo equipoRival = new Equipo();
+		
+		// Seleccion del equipo aliado
+		
+		int opcionMenu = -1;
+					
+		mostrarMenuSeleccionAliado();
+		
+		System.out.println("  Elija una opcion para crear el equipo ALIADO: ");
+		opcionMenu = Integer.parseInt(sc.nextLine());
+		
+		equipoAliado = seleccionEquipo(opcionMenu);
+		
+		if (equipoAliado.getNombreEquipo().equals(null)) {
+			
+			return;
+			
+		}
+		
+		System.out.println(equipoAliado.equipoToString());
+		
+		// Seleccion del equipo rival
+		
+		opcionMenu = -1;
+		
+		mostrarMenuSeleccionRival();
+		
+		System.out.println("  Elija una opcion para crear el equipo RIVAL: ");
+		opcionMenu = Integer.parseInt(sc.nextLine());
+		
+		equipoRival = seleccionEquipo(opcionMenu);
+		
+		if (equipoRival.getNombreEquipo().equals(null)) {
+			
+			return;
+			
+		}
+		
+		System.out.println(equipoRival.equipoToString());
+		
+		// Batalla
+		
+		batallaEquiposPokemon(equipoAliado,equipoRival);
+		
 	}
+	
+	// -------------------------------------------------------------------------------------------
+	// Menu para elegir si el equipo es uno guardado, si se improvisa o si se genera uno aleatorio
+	// -------------------------------------------------------------------------------------------
+	
+	private static Equipo seleccionEquipo(int opcionMenu) {
+		// TODO Auto-generated method stub
+
+		Equipo e = new Equipo();
+		
+		switch (opcionMenu) {
+		
+			case 1:
+				
+				e = seleccionarEquipo();
+				
+				break;
+				
+			case 2:
+				
+				equipoImprovisado(e);
+				
+				break;
+				
+			case 3:
+				
+				equipoAleatorio(e);
+				
+				break;
+				
+			default:
+				
+				if (opcionMenu != 0) {
+					
+					System.out.println("  [ERROR] Seleccione una opcion valida.");
+					
+				} else {
+					
+					System.out.println("  [INFO] Menu de pelea de seleccion de equipos cerrado.");
+					
+				}
+		
+		}
+		
+		return e;
+		
+	}
+	
+	// ----------------------------------------------------------------------------------------
+	// Permite introducir un equipo vacio y fuerza a que ese equipo se "llene" de uno existente
+	// ----------------------------------------------------------------------------------------
+	
+	private static Equipo seleccionarEquipo() {
+		// TODO Auto-generated method stub
+		
+		Equipo equipo = new Equipo();
+		
+		int numEquipo = 0;
+		
+		boolean existe = false;
+		
+		while (!existe) {
+			
+			System.out.println("  Lista de equipos guardados: \n");
+			
+			for (int i = 0;i < listaEquipos.size();i++) {
+				
+				System.out.println("  [" + (i + 1) + "] " + listaEquipos.get(i).bulkToString());
+				
+			}
+			
+			System.out.println("\n  Elija un equipo: ");
+			numEquipo = Integer.parseInt(sc.nextLine());
+			
+			numEquipo -= 1;
+			
+			existe = comprobarEquipo(listaEquipos.get(numEquipo).getNombreEquipo());
+			
+			System.out.println(listaEquipos.get(numEquipo).getNombreEquipo());
+			
+			
+			
+			if (!existe) {
+				
+				System.out.println("  [ERROR] El equipo seleccionado no existe.");
+				
+			} else {
+				
+				existe = true;
+				
+				equipo = listaEquipos.get(numEquipo);
+				
+			}
+			
+		}
+		
+		return equipo;
+		
+	}
+	
+	// ------------------------------------------------------------------------
+	// Crea un equipo al momento reutilizando el metodo usado en "Crear equipo"
+	// ------------------------------------------------------------------------
+
+	private static void equipoImprovisado(Equipo equipo) {
+		// TODO Auto-generated method stub
+		
+		String nomEquipoNuevo = "";
+		
+		int cantidad = 0;
+		
+		boolean terminar = false;
+		
+		while (!terminar) {
+			
+			System.out.println("  Escriba el nombre del equipo: ");
+			nomEquipoNuevo = sc.nextLine();
+			
+			if (comprobarEquipo(nomEquipoNuevo)) {
+				
+				System.out.println("  [ERROR] Ya existe un equipo con ese nombre. Pruebe de nuevo...");
+				
+			} else {
+				
+				equipo.setNombreEquipo(nomEquipoNuevo);
+				
+				System.out.println("  Escriba la cantidad de pokemons del equipo: ");
+				cantidad = Integer.parseInt(sc.nextLine());
+				
+				if (cantidad < 2 || cantidad > 6) {
+					
+					System.out.println("  [ERROR] Un equipo tiene que estar compuesto por 2 pokemons minimo y 6 como maximo.");
+					
+				} else {
+					
+					terminar = true;
+					
+				}
+				
+			}
+			
+		}
+		
+		crearEquipoUsuario(equipo,cantidad);
+		
+	}
+	
+	// -----------------------------------------------------------------------------------------------
+	// Crea un equipo con pokemons aleatorios reutilizando el metodo usado en "Crear equipo aleatorio"
+	// -----------------------------------------------------------------------------------------------
+
+	private static void equipoAleatorio(Equipo equipo) {
+		// TODO Auto-generated method stub
+		
+		String nomEquipoNuevo = "";
+		
+		int cantidad = 0;
+		
+		boolean terminar = false;
+		
+		while (!terminar) {
+			
+			System.out.println("  Escriba el nombre del equipo: ");
+			nomEquipoNuevo = sc.nextLine();
+			
+			if (comprobarEquipo(nomEquipoNuevo)) {
+				
+				System.out.println("  [ERROR] Ya existe un equipo con ese nombre. Pruebe de nuevo...");
+				
+			} else {
+				
+				equipo.setNombreEquipo(nomEquipoNuevo);
+				
+				System.out.println("  Escriba la cantidad de pokemons del equipo: ");
+				cantidad = Integer.parseInt(sc.nextLine());
+				
+				if (cantidad < 2 || cantidad > 6) {
+					
+					System.out.println("  [ERROR] Un equipo tiene que estar compuesto por 2 pokemons minimo y 6 como maximo.");
+					
+				} else {
+					
+					terminar = true;
+					
+				}
+				
+			}
+			
+		}
+		
+		crearEquipoAleatorio(equipo,cantidad);
+		
+	}
+	
+	// -----------------------------------------------------------------------------------------------------
+	// Aqui se desarrolla toda la batalla, introduciendo por parametro dos equipos y devolviendo el vencedor
+	// -----------------------------------------------------------------------------------------------------
+	
+	private static void batallaEquiposPokemon (Equipo e1, Equipo e2) {
+		// TODO Auto-generated method stub
+		
+		ArrayList<Pokemon> listaAliados = e1.getMiembrosEquipo();
+		ArrayList<Pokemon> listaRivales = e2.getMiembrosEquipo();
+		
+		double hpAliado = 0;
+		double hpRival = 0;
+		
+		int i = 0;
+		int j = 0;
+		int numEnfrentamiento = 1;
+		
+		boolean terminar = false;
+		
+		while (!terminar) {
+			
+			if (i == listaAliados.size() || j == listaRivales.size()) {
+				
+				terminar = true;
+				
+				System.out.println("  ¡FIN DE LA BATALLA!");
+				
+				System.out.println("\n•• ━━━━━━━━━━━━━━━━ ••●•• ━━━━━━━━━━━━━━━━ ••\n");
+			
+			} else {
+				
+				System.out.println("\n•• ━━━━━━━━━━━━━━━━ ••●•• ━━━━━━━━━━━━━━━━ ••\n");
+				System.out.println("  COMIENZA EL ENFRENTAMIENTO Nº" + numEnfrentamiento + "\n");
+				
+				Pokemon pAliado = listaAliados.get(i);
+				Pokemon pRival = listaRivales.get(j);
+				
+				if (hpAliado <= 0) {
+					
+					hpAliado = listaAliados.get(i).getPs();
+					
+					System.out.println("  [INFO] " + listaAliados.get(i).getNombre() + " aliado ha entrado a la pelea.\n");
+					
+				}
+				
+				if (hpRival <= 0) {
+					
+					hpRival = listaRivales.get(j).getPs();
+					
+					System.out.println("  [INFO] " + listaRivales.get(j).getNombre() + " rival ha entrado a la pelea.\n");
+					
+				}
+				
+				if (pAliado.getVel() >= pRival.getVel()) {
+					
+					System.out.println("  ¡" + pAliado.getNombre() + " es mas rapido!\n");
+					
+					while (hpAliado > 0 && hpRival > 0) {
+						
+						hpRival -= dañoRealizado(pAliado,pRival);
+						
+						System.out.println("  [DAÑO] " + pAliado.getNombre() + " ha golpeado a " + pRival.getNombre() + "\n");
+						
+						if (hpRival > 0) {
+							
+							hpAliado -= dañoRealizado(pAliado,pRival);
+							
+							System.out.println("  [DAÑO] " + pRival.getNombre() + " ha golpeado a " + pAliado.getNombre() + "\n");
+							
+							if (hpAliado <= pAliado.getPs() * 0.25) {
+								
+								System.out.println("  [ESTADO] Oh no... Parece que " + pAliado.getNombre() + " se esta debilitando. ¡Animo!\n");
+								
+							}
+							
+							if (hpRival <= pRival.getPs() * 0.25) {
+								
+								System.out.println("  [ESTADO] Los movimientos de " + pRival.getNombre() + " parecen poco condundentes, se nota que esta cansado, ya falta poco...\n");
+								
+							}
+							
+						}
+						
+						System.out.println("  -> Pulsa enter para continuar...");
+						sc.nextLine();
+						
+					}
+					
+					if (hpRival < hpAliado) {
+						
+						System.out.println("  [VICTORIA] " + pRival.getNombre() + " ha sido derrotado.\n");
+						j++;
+						
+					} else {
+						
+						System.out.println("  [DERROTA] " + pAliado.getNombre() + " ha sido derrotado.\n");
+						i++;
+						
+					}
+					
+				} else {
+					
+					System.out.println("  ¡" + pRival.getNombre() + " es mas rapido!\n");
+					
+					while (hpRival > 0 && hpAliado > 0) {
+						
+						hpAliado -= dañoRealizado(pRival,pAliado);
+						
+						System.out.println("  [DAÑO] " + pRival.getNombre() + " ha golpeado a " + pAliado.getNombre() + "\n");
+						
+						if (hpAliado > 0) {
+							
+							hpRival -= dañoRealizado(pRival,pAliado);
+							
+							System.out.println("  [DAÑO] " + pAliado.getNombre() + " ha golpeado a " + pRival.getNombre() + "\n");
+							
+							if (hpRival <= pRival.getPs() * 0.25) {
+								
+								System.out.println("  [ESTADO] Oh no... Parece que " + pRival.getNombre() + " se esta debilitando. ¡Animo!\n");
+								
+							}
+							
+							if (hpAliado <= pAliado.getPs() * 0.25) {
+								
+								System.out.println("  [ESTADO] Los movimientos de " + pAliado.getNombre() + " parecen poco condundentes, se nota que esta cansado, ya falta poco...\n");
+								
+							}
+							
+						}
+						
+						System.out.println("  -> Pulsa enter para continuar...");
+						sc.nextLine();
+						
+					}
+					
+					if (hpRival < hpAliado) {
+						
+						System.out.println("  [VICTORIA] " + pRival.getNombre() + " ha sido derrotado.");
+						j++;
+						
+					} else {
+						
+						System.out.println("  [DERROTA] " + pAliado.getNombre() + " ha sido derrotado.");
+						i++;
+						
+					}
+					
+				}
+				
+			}
+			
+			numEnfrentamiento++;
+		
+		}
+		
+		
+		
+		if (i < j) {
+			
+			System.out.println("  El equipo ganador es:");
+			System.out.println(e1.equipoToString());
+			System.out.println("  ¡ENHORABUENA!");
+			
+		} else {
+			
+			System.out.println("  El equipo ganador es:");
+			System.out.println(e2.equipoToString());
+			System.out.println("  Animo, seguro que la siguiente partida va mejor.");
+			
+		}
+		
+	}
+
 	
 	// -------------
 	// OPCION 9: FIN
@@ -922,7 +1338,7 @@ public class PokejavaAPP {
 		double defDefensor = 0;
 		double totalDmg = 0;
 		
-		double random = 0.85 + (Math.random() * (1.0 - 0.85)); // Randomizador del daño base
+		double random = 0.85 + (Math.random() * (1.0 - 0.85)); // Randomizador del daño base (Sumar de 0 a 0.15)
 		
 		if (p1.getAtq() >= p1.getAtEsp()) {
 			
@@ -936,7 +1352,7 @@ public class PokejavaAPP {
 			
 		}
 		
-		totalDmg = ((( (2 * 50 / 5.0) + 2) * 90 * (dmgAtacante / defDefensor)) / 50.0) + 2; // Daño base
+		totalDmg = ((( (2 * 50 / 5.0) + 2) * 90 * (dmgAtacante / defDefensor)) / 50.0) + 2; // Calculo de daño base
 		
 		return totalDmg * random;
 		
@@ -1150,7 +1566,8 @@ public class PokejavaAPP {
 		
 		System.out.println("\n╔═══════════════════ •●• ═══════════════════╗\n");
 		System.out.println("                   POKEJAVA");
-		System.out.println("\n╠═══════════════════ •●• ═══════════════════╣\n");
+		System.out.println("                                       v1.0");
+		System.out.println("╠═══════════════════ •●• ═══════════════════╣\n");
 		System.out.println("  ⟅1⟆ Mostrar pokedex");
 		System.out.println("  ⟅2⟆ Mostrar pokemon por nombre");
 		System.out.println("  ⟅3⟆ Batalla 1vs1");
@@ -1159,7 +1576,7 @@ public class PokejavaAPP {
 		System.out.println("  ⟅6⟆ Crear nuevo equipo");
 		System.out.println("  ⟅7⟆ Borrar un equipo");
 		System.out.println("  ⟅8⟆ Modificar un equipo");
-		System.out.println("  ⟅9⟆ Batalla entre equipos pokemon (EN DESARROLLO)");
+		System.out.println("  ⟅9⟆ Batalla entre equipos pokemon");
 		System.out.println("  ⟅0⟆ SALIR");
 		System.out.println("\n╚═══════════════════ •●• ═══════════════════╝\n");
 		
@@ -1193,6 +1610,28 @@ public class PokejavaAPP {
 		System.out.println("  ⟅2⟆ Cambiar pokemons del equipo");
 		System.out.println("  ⟅0⟆ SALIR");
 		System.out.println("\n└────── • CREACION EQUIPO • ──────┘\n");
+		
+	}
+	
+	private static void mostrarMenuSeleccionAliado() {
+		
+		System.out.println("\n┌────── • SELECCIONAR EQUIPO (ALIADO) • ──────┐\n");
+		System.out.println("  ⟅1⟆ Equipo guardado");
+		System.out.println("  ⟅2⟆ Improvisar equipo");
+		System.out.println("  ⟅3⟆ Generar equipo aleatorio");
+		System.out.println("  ⟅0⟆ SALIR");
+		System.out.println("\n└────── • SELECCIONAR EQUIPO (ALIADO) • ──────┘\n");
+		
+	}
+	
+	private static void mostrarMenuSeleccionRival() {
+		
+		System.out.println("\n┌────── • SELECCIONAR EQUIPO (RIVAL) • ──────┐\n");
+		System.out.println("  ⟅1⟆ Equipo guardado");
+		System.out.println("  ⟅2⟆ Improvisar equipo");
+		System.out.println("  ⟅3⟆ Generar equipo aleatorio");
+		System.out.println("  ⟅0⟆ SALIR");
+		System.out.println("\n└────── • SELECCIONAR EQUIPO (RIVAL) • ──────┘\n");
 		
 	}
 
