@@ -1,3 +1,3 @@
-NombreEquipo::NumeroDePokemons
+NombreEquipo::NumeroDePokemon
 EquipoPruebas::1,2,3,4,5,6
 EquipoUnax::111,123,142

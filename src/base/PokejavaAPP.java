@@ -107,7 +107,7 @@ public class PokejavaAPP {
 	// OPCION 1: Mostrar pokedex completa
 	// ----------------------------------
 
-	private static void mostrarPokedex() {
+	/*private static void mostrarPokedex() {
 		// TODO Auto-generated method stub
 		
 		for (Pokemon p : listaPokemon) {
@@ -116,6 +116,24 @@ public class PokejavaAPP {
 			
 		}
 		
+	}*/
+	
+	private static void mostrarPokedex() {
+
+	    System.out.println("  " + "═".repeat(157)); 
+
+	    for (Pokemon p : listaPokemon) {
+	        String tiposStr = String.join(", ", p.getTipos());
+
+	        // EXPLICACIÓN DEL FORMATO DE ESTADÍSTICAS:
+	        // %-6.1f -> Reserva 6 espacios para el decimal y pone 1 solodecimal.
+	        
+	        System.out.printf("  Nº%-3d - Nombre: %-12s - Tipo/s: %-19s - Estadisticas [PS: %-5.1f | Atq: %-5.1f | Def: %-5.1f | At.Esp: %-5.1f | Def.Esp: %-5.1f | Vel: %-5.1f]%n",p.getNumPokedex(),p.getNombre(),tiposStr,p.getPs(),p.getAtq(),p.getDef(),p.getAtEsp(),p.getDefEsp(),p.getVel());
+	        
+	    }
+	    
+	    System.out.println("  " + "═".repeat(157));
+	    
 	}
 	
 	// -------------
