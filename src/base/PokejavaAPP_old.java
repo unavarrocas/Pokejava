@@ -5,7 +5,10 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class PokejavaAPP {
+import model.Equipo;
+import model.Pokemon;
+
+public class PokejavaAPP_old {
 	
 	private static Scanner sc = new Scanner(System.in);
 	private static ArrayList<Pokemon> listaPokemon = new ArrayList<Pokemon>();
@@ -128,7 +131,7 @@ public class PokejavaAPP {
 	        // EXPLICACIÓN DEL FORMATO DE ESTADÍSTICAS:
 	        // %-6.1f -> Reserva 6 espacios para el decimal y pone 1 solodecimal.
 	        
-	        System.out.printf("  Nº%-3d - Nombre: %-12s - Tipo/s: %-19s - Estadisticas [PS: %-5.1f | Atq: %-5.1f | Def: %-5.1f | At.Esp: %-5.1f | Def.Esp: %-5.1f | Vel: %-5.1f]%n",p.getNumPokedex(),p.getNombre(),tiposStr,p.getPs(),p.getAtq(),p.getDef(),p.getAtEsp(),p.getDefEsp(),p.getVel());
+	        System.out.printf("  Nº%-3d - Nombre: %-12s - Tipo/s: %-19s - Estadisticas [PS: %-5.1f | Atq: %-5.1f | Def: %-5.1f | At.Esp: %-5.1f | Def.Esp: %-5.1f | Vel: %-5.1f]%n",p.getId(),p.getNombre(),tiposStr,p.getPs(),p.getAtq(),p.getDef(),p.getAtEsp(),p.getDefEsp(),p.getVel());
 	        
 	    }
 	    
@@ -1436,7 +1439,7 @@ public class PokejavaAPP {
 					
 					for (Pokemon p : listaPokemon) {
 						
-						if (Integer.parseInt(pokemons[i]) == p.getNumPokedex()) {
+						if (Integer.parseInt(pokemons[i]) == p.getId()) {
 							
 							equipo.agregarPokemon(p);
 							
@@ -1477,11 +1480,11 @@ public class PokejavaAPP {
 					
 					if (j == listaEquipos.get(i).getMiembrosEquipo().size() - 1) {
 						
-						numPokemons += listaEquipos.get(i).getMiembrosEquipo().get(j).getNumPokedex();
+						numPokemons += listaEquipos.get(i).getMiembrosEquipo().get(j).getId();
 						
 					} else {
 						
-						numPokemons += listaEquipos.get(i).getMiembrosEquipo().get(j).getNumPokedex() + ",";
+						numPokemons += listaEquipos.get(i).getMiembrosEquipo().get(j).getId() + ",";
 						
 					}
 					

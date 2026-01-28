@@ -1,10 +1,10 @@
-package base;
+package model;
 
 import java.util.Arrays;
 
 public class Pokemon {
 	
-	private int numPokedex;
+	private int id;
 	private String nombre;
 	private String[] tipos = new String[2];
 	private double ps;
@@ -20,9 +20,9 @@ public class Pokemon {
 		
 	}
 	
-	public Pokemon(int numPokedex, String nombre, String[] tipos, double ps, double atq, double def, double atEsp, double defEsp, double vel) {
+	public Pokemon(int id, String nombre, String[] tipos, double ps, double atq, double def, double atEsp, double defEsp, double vel) {
 		
-		this.numPokedex = numPokedex;
+		this.id = id;
 		this.nombre = nombre;
 		this.tipos = tipos;
 		this.ps = ps;
@@ -36,12 +36,12 @@ public class Pokemon {
 	
 	// GETTERS Y SETTERS
 
-	public int getNumPokedex() {
-		return numPokedex;
+	public int getId() {
+		return id;
 	}
 
-	public void setNumPokedex(int numPokedex) {
-		this.numPokedex = numPokedex;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getNombre() {
@@ -112,7 +112,7 @@ public class Pokemon {
 
 	@Override
 	public String toString() {
-		return "Pokemon [numPokedex=" + numPokedex + ", nombre=" + nombre + ", tipos=" + Arrays.toString(tipos)
+		return "Pokemon [numPokedex=" + id + ", nombre=" + nombre + ", tipos=" + Arrays.toString(tipos)
 				+ ", atq=" + atq + ", def=" + def + ", atEsp=" + atEsp + ", defEsp=" + defEsp + ", vel=" + vel + "]";
 	}
 	
@@ -121,7 +121,7 @@ public class Pokemon {
 		String tiposPokemon = mostrarTipos();
 		
 		return "\n╔═════ ∘◦ " + nombre + " ◦∘ ══════╗\n"
-			 + "\n  Nº Pokedex: " + numPokedex + "\n"
+			 + "\n  Nº Pokedex: " + id + "\n"
 			 + "  Tipo/s: " + tiposPokemon + "\n"
 			 + "  PS: " + ps + "\n"
 			 + "  Ataque: " + atq + "\n"
@@ -137,7 +137,7 @@ public class Pokemon {
 		
 		String tiposPokemon = mostrarTipos();
 		
-		return "Nº" + numPokedex + " - Nombre: " + nombre + " - Tipo/s: " + tiposPokemon + " - Estadisticas [PS: " + ps + ", Atq: " + atq + ", Def: " + def + ", At. Esp: " + atEsp + ", Def. Esp: " + defEsp + ", Vel: " + vel + "]";
+		return "Nº" + id + " - Nombre: " + nombre + " - Tipo/s: " + tiposPokemon + " - Estadisticas [PS: " + ps + ", Atq: " + atq + ", Def: " + def + ", At. Esp: " + atEsp + ", Def. Esp: " + defEsp + ", Vel: " + vel + "]";
 		
 	}
 	
