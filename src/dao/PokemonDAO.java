@@ -51,33 +51,42 @@ public class PokemonDAO {
 	
 	public Pokemon mostrarPokemonNombre (String nombre) throws SQLException {
 		
-		Pokemon p = new Pokemon();
-		
-		String sql = "SELECT * FROM pokemons WHERE nombre='" + nombre + "'";
+		String sql = "SELECT * FROM pokemons WHERE nombre = ?";
 		
 		try (Connection con = ConexionDB.getConexion();
-		     PreparedStatement ps = con.prepareStatement(sql);
-		     ResultSet rs = ps.executeQuery()) {
-		    	 
-		    rs.next();
+			PreparedStatement ps = con.prepareStatement(sql)) {
 		    
-    		p.setId(rs.getInt("id"));
-    		p.setNombre(rs.getString("nombre"));
-    		p.setTipos(rs.getString("tipo").split("/"));
-    		p.setPs(rs.getDouble("ps"));
-    		p.setAtq(rs.getDouble("ataque"));
-    		p.setDef(rs.getDouble("defensa"));
-    		p.setAtEsp(rs.getDouble("at_especial"));
-    		p.setDefEsp(rs.getDouble("def_especial"));
-    		p.setVel(rs.getDouble("velocidad"));
-		    	 
-		    } catch (SQLException e) {
-		    	
-		    	System.out.println("  [ERROR] Hay un error en el metodo mostrarTodos(): " + e.getMessage());
+			ps.setString(1, nombre);
+			
+			try (ResultSet rs = ps.executeQuery()) {
+				
+				if (rs.next()) {
+					
+					Pokemon p = new Pokemon();
+		    		
+		    		p.setId(rs.getInt("id"));
+		    		p.setNombre(rs.getString("nombre"));
+		    		p.setTipos(rs.getString("tipo").split("/")); // Se separa con el split para acomodarlos al String[2]
+		    		p.setPs(rs.getDouble("ps"));
+		    		p.setAtq(rs.getDouble("ataque"));
+		    		p.setDef(rs.getDouble("defensa"));
+		    		p.setAtEsp(rs.getDouble("at_especial"));
+		    		p.setDefEsp(rs.getDouble("def_especial"));
+		    		p.setVel(rs.getDouble("velocidad"));
+		    		
+		    		return p;
+		    		
+		    	}
 		    	
 		    }
+			 
+		} catch (SQLException e) {
+		    	
+		    System.out.println("  [ERROR] Hay un error en el metodo mostrarTodos(): " + e.getMessage());
+		    	
+		}
 		
-		return p;
+		return null; // Si el pokemon no esta en la DB devuelve null
 		
 	}
 

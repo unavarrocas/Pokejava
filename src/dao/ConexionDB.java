@@ -15,6 +15,7 @@ public class ConexionDB {
     private static Connection conexion = null; // Esto guarda la conexion que va a estar abierta
 
     public static Connection getConexion() {
+    	
         try {
 
             if (conexion == null || conexion.isClosed()) {
@@ -31,23 +32,6 @@ public class ConexionDB {
         }
         
         return conexion;
-    }
-    
-    public static void cerrarConexion() {
-        try {
-        	
-            if (conexion != null && !conexion.isClosed()) {
-            	
-                conexion.close();
-                System.out.println("  [INFO] Conexión cerrada correctamente.");
-                
-            }
-            
-        } catch (SQLException e) {
-        	
-            System.out.println("  [ERROR] No se pudo cerrar la conexión: " + e.getMessage());
-            
-        }
     }
 
 }

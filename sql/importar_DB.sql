@@ -1,11 +1,16 @@
 -- ========================================================
--- Script de Creación e Inserción para pokemons_db
+-- Script de creación e inserción para pokemons_db
 -- ========================================================
+
+-- 1. POKEMONS
 
 CREATE DATABASE IF NOT EXISTS pokemons_db;
 USE pokemons_db;
 
--- Borramos la tabla si existe para evitar conflictos de duplicados en la migración
+DROP TABLE IF EXISTS equipo_integrantes;
+DROP TABLE IF EXISTS pokemon_movimientos;
+DROP TABLE IF EXISTS equipos;
+DROP TABLE IF EXISTS movimientos;
 DROP TABLE IF EXISTS pokemons;
 
 CREATE TABLE pokemons (
@@ -19,6 +24,8 @@ CREATE TABLE pokemons (
     def_especial INT,
     velocidad INT
 );
+
+-- Insert de pokemons
 
 INSERT INTO pokemons (id, nombre, tipo, ps, ataque, defensa, at_especial, def_especial, velocidad) VALUES
 (1, 'Turtwig', 'Planta', 130, 96, 84, 65, 75, 51),
@@ -232,17 +239,13 @@ INSERT INTO pokemons (id, nombre, tipo, ps, ataque, defensa, at_especial, def_es
 (209, 'Absol', 'Siniestro', 140, 165, 80, 95, 80, 104),
 (210, 'Giratina', 'Fantasma/Dragón', 225, 120, 165, 120, 165, 110);
 
--- ========================================================
--- Script de Equipos para pokemons_db
--- ========================================================
+-- EQUIPOS
 
--- 1. Tabla de Equipos (Cabecera)
 CREATE TABLE IF NOT EXISTS equipos (
     id_equipo INT AUTO_INCREMENT PRIMARY KEY,
     nombre_equipo VARCHAR(50) NOT NULL
 );
 
--- 2. Tabla de Integrantes (Cuerpo del equipo)
 CREATE TABLE IF NOT EXISTS equipo_integrantes (
     id_equipo INT,
     id_pokemon INT,
@@ -254,11 +257,8 @@ CREATE TABLE IF NOT EXISTS equipo_integrantes (
     FOREIGN KEY (id_pokemon) REFERENCES pokemons(id) ON UPDATE CASCADE
 );
 
--- ========================================================
--- INSERCIÓN DE EJEMPLOS DE PRUEBA
--- ========================================================
+-- Insert de equipos de prueba
 
--- EQUIPO 1: "Sinnoh All-Stars" (Equipo de 6)
 INSERT INTO equipos (nombre_equipo) VALUES ('Sinnoh All-Stars');
 INSERT INTO equipo_integrantes (id_equipo, id_pokemon, posicion) VALUES 
 (1, 111, 1), -- Garchomp
@@ -268,15 +268,145 @@ INSERT INTO equipo_integrantes (id_equipo, id_pokemon, posicion) VALUES
 (1, 145, 5), -- Weavile
 (1, 42, 6);  -- Machamp
 
--- EQUIPO 2: "Trío de Iniciales" (Equipo de 3)
 INSERT INTO equipos (nombre_equipo) VALUES ('Trío de Iniciales');
 INSERT INTO equipo_integrantes (id_equipo, id_pokemon, posicion) VALUES 
 (2, 3, 1),   -- Torterra
 (2, 6, 2),   -- Infernape
 (2, 9, 3);   -- Empoleon
 
--- EQUIPO 3: "Tanques de Roca" (Equipo de 2 para probar flexibilidad)
 INSERT INTO equipos (nombre_equipo) VALUES ('Tanques de Roca');
 INSERT INTO equipo_integrantes (id_equipo, id_pokemon, posicion) VALUES 
 (3, 35, 1),  -- Steelix
 (3, 33, 2);  -- Golem
+
+-- MOVIMIENTOS
+
+CREATE TABLE movimientos (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL,
+    tipo VARCHAR(20) NOT NULL,
+    categoria VARCHAR(20) NOT NULL, -- FISICO o ESPECIAL
+    potencia INT DEFAULT 0,
+    precision_atq INT DEFAULT 100,
+    pp INT DEFAULT 15
+);
+
+CREATE TABLE pokemon_movimientos (
+    pokemon_id INT,
+    movimiento_id INT,
+    PRIMARY KEY (pokemon_id, movimiento_id),
+    FOREIGN KEY (pokemon_id) REFERENCES pokemons(id) ON DELETE CASCADE,
+    FOREIGN KEY (movimiento_id) REFERENCES movimientos(id) ON DELETE CASCADE
+);
+
+-- 2. INSERCIÓN DE MOVIMIENTOS (18 TIPOS)
+INSERT INTO movimientos (nombre, tipo, categoria, potencia, precision_atq, pp) VALUES
+-- ACERO
+('Puño Meteoro', 'ACERO', 'FISICO', 90, 90, 10),
+('Foco Resplandor', 'ACERO', 'ESPECIAL', 80, 100, 10),
+('Cabeza de Hierro', 'ACERO', 'FISICO', 80, 100, 15),
+('Ala de Acero', 'ACERO', 'FISICO', 70, 90, 25),
+('Garra Metal', 'ACERO', 'FISICO', 50, 95, 35),
+-- AGUA
+('Hidrobomba', 'AGUA', 'ESPECIAL', 110, 80, 5),
+('Surf', 'AGUA', 'ESPECIAL', 90, 100, 15),
+('Cascada', 'AGUA', 'FISICO', 80, 100, 15),
+('Rayo Burbuja', 'AGUA', 'ESPECIAL', 65, 100, 20),
+('Acua Jet', 'AGUA', 'FISICO', 40, 100, 20),
+-- BICHO
+('Tijera X', 'BICHO', 'FISICO', 80, 100, 15),
+('Zumbido', 'BICHO', 'ESPECIAL', 90, 100, 10),
+('Ida y Vuelta', 'BICHO', 'FISICO', 70, 100, 20),
+('Chupavidas', 'BICHO', 'FISICO', 80, 100, 10),
+('Megacuerno', 'BICHO', 'FISICO', 120, 85, 10),
+-- DRAGON
+('Enfado', 'DRAGON', 'FISICO', 120, 100, 10),
+('Garra Dragon', 'DRAGON', 'FISICO', 80, 100, 15),
+('Pulso Dragon', 'DRAGON', 'ESPECIAL', 85, 100, 10),
+('Carga Dragon', 'DRAGON', 'FISICO', 100, 75, 10),
+('Cometa Draco', 'DRAGON', 'ESPECIAL', 130, 90, 5),
+-- ELECTRICO
+('Trueno', 'ELECTRICO', 'ESPECIAL', 110, 70, 10),
+('Rayo', 'ELECTRICO', 'ESPECIAL', 90, 100, 15),
+('Chispazo', 'ELECTRICO', 'ESPECIAL', 80, 100, 15),
+('Puño Trueno', 'ELECTRICO', 'FISICO', 75, 100, 15),
+('Voltio Cruel', 'ELECTRICO', 'FISICO', 90, 100, 15),
+-- FANTASMA
+('Bola Sombra', 'FANTASMA', 'ESPECIAL', 80, 100, 15),
+('Garra Umbria', 'FANTASMA', 'FISICO', 70, 100, 15),
+('Puño Sombra', 'FANTASMA', 'FISICO', 60, 100, 20),
+('Tinieblas', 'FANTASMA', 'ESPECIAL', 60, 100, 15),
+('Golpe Fantasma', 'FANTASMA', 'FISICO', 90, 100, 10),
+-- FUEGO
+('Llamarada', 'FUEGO', 'ESPECIAL', 110, 85, 5),
+('Lanzallamas', 'FUEGO', 'ESPECIAL', 90, 100, 15),
+('Envite Igneo', 'FUEGO', 'FISICO', 120, 100, 15),
+('Puño Fuego', 'FUEGO', 'FISICO', 75, 100, 15),
+('Sofoco', 'FUEGO', 'ESPECIAL', 130, 90, 5),
+-- HADA (NUEVO)
+('Fuerza Lunar', 'HADA', 'ESPECIAL', 95, 100, 15),
+('Brillo Magico', 'HADA', 'ESPECIAL', 80, 100, 10),
+('Carantoña', 'HADA', 'FISICO', 90, 90, 10),
+('Viento Feerico', 'HADA', 'ESPECIAL', 40, 100, 30),
+('Beso Drenaje', 'HADA', 'ESPECIAL', 50, 100, 10),
+('Voz Cautivadora', 'HADA', 'ESPECIAL', 40, 100, 15),
+-- HIELO
+('Ventisca', 'HIELO', 'ESPECIAL', 110, 70, 5),
+('Rayo Hielo', 'HIELO', 'ESPECIAL', 90, 100, 10),
+('Puño Hielo', 'HIELO', 'FISICO', 75, 100, 15),
+('Colmillo Hielo', 'HIELO', 'FISICO', 65, 95, 15),
+('Canto Helado', 'HIELO', 'FISICO', 40, 100, 30),
+-- LUCHA
+('A bocajarro', 'LUCHA', 'FISICO', 120, 100, 5),
+('Esfera Aural', 'LUCHA', 'ESPECIAL', 80, 100, 20),
+('Onda Certera', 'LUCHA', 'ESPECIAL', 120, 70, 5),
+('Demolicion', 'LUCHA', 'FISICO', 75, 100, 15),
+('Ultra puño', 'LUCHA', 'FISICO', 40, 100, 30),
+-- NORMAL
+('Hiperrayo', 'NORMAL', 'ESPECIAL', 150, 90, 5),
+('Giga Impacto', 'NORMAL', 'FISICO', 150, 90, 5),
+('Fuerza', 'NORMAL', 'FISICO', 80, 100, 15),
+('Golpe Cuerpo', 'NORMAL', 'FISICO', 85, 100, 15),
+('Placaje', 'NORMAL', 'FISICO', 40, 100, 35),
+-- PLANTA
+('Rayo Solar', 'PLANTA', 'ESPECIAL', 120, 100, 10),
+('Hoja Aguda', 'PLANTA', 'FISICO', 90, 100, 15),
+('Energibola', 'PLANTA', 'ESPECIAL', 90, 100, 10),
+('Giga Drenado', 'PLANTA', 'ESPECIAL', 75, 100, 10),
+('Lluevehojas', 'PLANTA', 'ESPECIAL', 130, 90, 5),
+-- PSIQUICO
+('Psiquico', 'PSIQUICO', 'ESPECIAL', 90, 100, 10),
+('Psicocorte', 'PSIQUICO', 'FISICO', 70, 100, 20),
+('Zen Headbutt', 'PSIQUICO', 'FISICO', 80, 90, 15),
+('Confusion', 'PSIQUICO', 'ESPECIAL', 50, 100, 25),
+('Premonicion', 'PSIQUICO', 'ESPECIAL', 120, 100, 10),
+-- ROCA
+('Roca Afilada', 'ROCA', 'FISICO', 100, 80, 5),
+('Avalancha', 'ROCA', 'FISICO', 75, 90, 10),
+('Joyas de Luz', 'ROCA', 'ESPECIAL', 80, 100, 20),
+('Poder Pasado', 'ROCA', 'ESPECIAL', 60, 100, 5),
+('Lanzarocas', 'ROCA', 'FISICO', 50, 90, 15),
+-- SINIESTRO
+('Triturar', 'SINIESTRO', 'FISICO', 80, 100, 15),
+('Pulso Umbrio', 'SINIESTRO', 'ESPECIAL', 80, 100, 15),
+('Tajo Umbrio', 'SINIESTRO', 'FISICO', 70, 100, 15),
+('Mordisco', 'SINIESTRO', 'FISICO', 60, 100, 25),
+('Vendetta', 'SINIESTRO', 'FISICO', 50, 100, 10),
+-- TIERRA
+('Terremoto', 'TIERRA', 'FISICO', 100, 100, 10),
+('Tierra Viva', 'TIERRA', 'ESPECIAL', 90, 100, 10),
+('Excavar', 'TIERRA', 'FISICO', 80, 100, 10),
+('Disparo Lodo', 'TIERRA', 'ESPECIAL', 55, 95, 15),
+('Magnitud', 'TIERRA', 'FISICO', 70, 100, 30),
+-- VENENO
+('Bomba Lodo', 'VENENO', 'ESPECIAL', 90, 100, 10),
+('Puya Nociva', 'VENENO', 'FISICO', 80, 100, 20),
+('Carga Toxica', 'VENENO', 'ESPECIAL', 65, 100, 10),
+('Veneno X', 'VENENO', 'FISICO', 70, 100, 20),
+('Residuos', 'VENENO', 'ESPECIAL', 65, 100, 20),
+-- VOLADOR
+('Pajaro Osado', 'VOLADOR', 'FISICO', 120, 100, 15),
+('Tajo Aereo', 'VOLADOR', 'ESPECIAL', 75, 95, 15),
+('Golpe Aereo', 'VOLADOR', 'FISICO', 60, 100, 20),
+('Vuelo', 'VOLADOR', 'FISICO', 90, 95, 15),
+('Tornado', 'VOLADOR', 'ESPECIAL', 40, 100, 35);
