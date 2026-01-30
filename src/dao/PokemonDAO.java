@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Movimiento;
 import model.Pokemon;
 
 public class PokemonDAO {
@@ -27,7 +28,7 @@ public class PokemonDAO {
 		    		
 		    		p.setId(rs.getInt("id"));
 		    		p.setNombre(rs.getString("nombre"));
-		    		p.setTipos(rs.getString("tipo").split("/"));
+		    		p.setTipos(rs.getString("tipo").split("/")); // Se separa con el split para acomodarlos al String[2]
 		    		p.setPs(rs.getDouble("ps"));
 		    		p.setAtq(rs.getDouble("ataque"));
 		    		p.setDef(rs.getDouble("defensa"));
@@ -73,6 +74,7 @@ public class PokemonDAO {
 		    		p.setAtEsp(rs.getDouble("at_especial"));
 		    		p.setDefEsp(rs.getDouble("def_especial"));
 		    		p.setVel(rs.getDouble("velocidad"));
+		    		cargarMovimientos(p);
 		    		
 		    		return p;
 		    		
@@ -88,6 +90,45 @@ public class PokemonDAO {
 		
 		return null; // Si el pokemon no esta en la DB devuelve null
 		
+	}
+	
+	public void cargarMovimientos (Pokemon p) throws SQLException {
+		
+		String sql = "SELECT m.* FROM movimientos m " +
+                "JOIN pokemon_movimientos pm ON m.id = pm.movimiento_id " +
+                "WHERE pm.pokemon_id = ?";
+		
+		try (Connection con = ConexionDB.getConexion();
+				PreparedStatement ps = con.prepareStatement(sql)) {
+			
+			ps.setInt(1, p.getId());
+					
+			try (ResultSet rs = ps.executeQuery()) {
+				
+				while (rs.next()) {
+					
+					Movimiento m = new Movimiento();
+					
+					m.setId(rs.getInt("id"));
+					m.setNombre(rs.getString("nombre"));
+					m.setTipo(rs.getString("tipo"));
+					m.setCategoria(rs.getString("categoria"));
+					m.setPotencia(rs.getDouble("potencia"));
+					m.setPrecision(rs.getDouble("precision_atq"));
+					m.setPp(rs.getInt("pp"));
+					
+					p.agregarMovimiento(m);
+					
+				}
+				
+			}
+		
+		} catch (SQLException e) {
+			
+			System.out.println("  [ERROR] Hay un error en el metodo mostrarTodos(): " + e.getMessage());
+			
+		}
+				
 	}
 
 }

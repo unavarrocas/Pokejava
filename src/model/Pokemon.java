@@ -1,6 +1,8 @@
 package model;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Pokemon {
 	
@@ -13,10 +15,13 @@ public class Pokemon {
 	private double atEsp;
 	private double defEsp;
 	private double vel;
+	private List<Movimiento> movimientos;
 	
 	// CONSTRUCTORES
 	
 	public Pokemon () {
+		
+		this.movimientos = new ArrayList<>();
 		
 	}
 	
@@ -31,6 +36,7 @@ public class Pokemon {
 		this.atEsp = atEsp;
 		this.defEsp = defEsp;
 		this.vel = vel;
+		this.movimientos = new ArrayList<>();
 		
 	}
 	
@@ -119,8 +125,9 @@ public class Pokemon {
 	public String pokemonToString() {
 		
 		String tiposPokemon = mostrarTipos();
+		String movPokemon = mostrarMov();
 		
-		return "\n╔═════ ∘◦ " + nombre + " ◦∘ ══════╗\n"
+		return "\n╔═════════ ∘◦ " + nombre + " ◦∘ ══════════╗\n"
 			 + "\n  Nº Pokedex: " + id + "\n"
 			 + "  Tipo/s: " + tiposPokemon + "\n"
 			 + "  PS: " + ps + "\n"
@@ -128,8 +135,10 @@ public class Pokemon {
 			 + "  Defensa: " + def + "\n"
 			 + "  Atq. Especial: " + atEsp + "\n"
 			 + "  Def. Especial: " + defEsp + "\n"
-			 + "  Velocidad: " + vel + "\n"
-			 + "\n╚═════ ∘◦ " + nombre + " ◦∘ ══════╝\n";
+			 + "  Velocidad: " + vel + "\n\n"
+			 + "  Movimientos: " + "\n\n"
+			 + "  " + movPokemon
+			 + "\n╚═════════ ∘◦ " + nombre + " ◦∘ ══════════╝\n";
 		
 	}
 	
@@ -147,7 +156,7 @@ public class Pokemon {
 		
 		String tiposPokemon = "";
 		
-		for (int i = 0; i < tipos.length;i++) {
+		for (int i = 0;i < tipos.length;i++) {
 			
 			if (i < tipos.length - 1) {
 				
@@ -162,6 +171,34 @@ public class Pokemon {
 		}
 		
 		return tiposPokemon;
+		
+	}
+	
+	private String mostrarMov () {
+		
+		String movPokemon = "";
+		
+		for (int i = 0;i < movimientos.size();i++) {
+						
+			if (i == 0) {
+				
+				movPokemon += "-> [" + movimientos.get(i).getPp() + "] - " + movimientos.get(i).getNombre() + "\n";
+				
+			} else {
+				
+				movPokemon += "  -> [" + movimientos.get(i).getPp() + "] - " + movimientos.get(i).getNombre() + "\n";
+	
+			}
+			
+		}
+		
+		return movPokemon;
+		
+	}
+	
+	public void agregarMovimiento (Movimiento m) {
+		
+		this.movimientos.add(m);
 		
 	}
 }
