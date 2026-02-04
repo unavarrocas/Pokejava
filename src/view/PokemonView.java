@@ -3,6 +3,7 @@ package view;
 import java.util.List;
 import java.util.Scanner;
 
+import model.Movimiento;
 import model.Pokemon;
 
 public class PokemonView {
@@ -119,17 +120,25 @@ public class PokemonView {
 		
 	}
 	
-	public void mostrarMensajeAtaque (Pokemon atq, Pokemon def, double hpDef, double dmgAtq, double mult) {
+	public void mostrarMensajeAtaque (Pokemon atq, Pokemon def, double hpDef, double dmgAtq, double mult, double fallo, Movimiento mov) {
 		
-		System.out.println("\n  " + atq.getNombre() + " ha golpeado a " + def.getNombre() + ". " + mostrarMensajeEfectividad(def,mult));
-		
-		if (hpDef < 0) {
+		if (fallo < 1) {
 			
-			hpDef = 0;
+			System.out.println("\n  " + atq.getNombre() + " ha usado " + mov.getNombre() + " pero falló...");
+			
+		} else {
+			
+			System.out.println("\n  " + atq.getNombre() + " ha usado " + mov.getNombre() + ". " + mostrarMensajeEfectividad(def,mult));
+			
+			if (hpDef < 0) {
+				
+				hpDef = 0;
+				
+			}
+			
+			System.out.println("  Estadísticas combate: [HP " + def.getNombre() + ": " + (int) hpDef + " | Daño realizado por " + atq.getNombre() + ": " + (int) dmgAtq + "]");
 			
 		}
-		
-		System.out.println("  Estadísticas combate: [HP " + def.getNombre() + ": " + (int) hpDef + " | Daño realizado por " + atq.getNombre() + ": " + (int) dmgAtq + "]");
 		
 	}
 	
@@ -154,6 +163,35 @@ public class PokemonView {
 	    }
 		
 		return "";
+		
+	}
+	
+	public int seleccionarMovimiento () {
+		
+		int numMov;
+		
+		System.out.println("\n  Elija el movimiento que va a usar: ");
+		numMov = Integer.parseInt(sc.nextLine());
+		
+		if (numMov < 0 || numMov > 4) {
+			
+			return -1;
+			
+		}
+		
+		return numMov - 1;
+		
+	}
+	
+	public void mostrarMoviminetosConPPDiponibles (Pokemon p, int[] pps) {
+		
+		System.out.println("");
+		
+		for (int i = 0;i < p.getMovimientos().size();i++) {
+			
+			System.out.printf("  ⟅" + (i + 1) + "⟆ [%2d] - %-16s%n",pps[i],p.getMovimientos().get(i).getNombre());
+			
+		}
 		
 	}
 	

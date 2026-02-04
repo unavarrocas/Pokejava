@@ -7,6 +7,7 @@ public class ResultadoAtaque {
 	
 	public double dmg;
 	public double efectividad;
+	public double fallo;
 	
 	// CONSTRUCTORES
 	
@@ -14,10 +15,11 @@ public class ResultadoAtaque {
 		
 	}
 	
-	public ResultadoAtaque(double dmg, double efectividad) {
+	public ResultadoAtaque(double dmg, double efectividad, double fallo) {
 		
 		this.dmg = dmg;
 		this.efectividad = efectividad;
+		this.fallo = fallo;
 		
 	}
 	
@@ -37,6 +39,14 @@ public class ResultadoAtaque {
 
 	public void setEfectividad(double efectividad) {
 		this.efectividad = efectividad;
+	}
+
+	public double getFallo() {
+		return fallo;
+	}
+
+	public void setFallo(double fallo) {
+		this.fallo = fallo;
 	}
 
 }

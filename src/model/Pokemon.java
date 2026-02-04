@@ -114,6 +114,14 @@ public class Pokemon {
 		this.vel = vel;
 	}
 	
+	public List<Movimiento> getMovimientos() {
+		return movimientos;
+	}
+
+	public void setMovimientos(List<Movimiento> movimientos) {
+		this.movimientos = movimientos;
+	}	
+	
 	// toStrings personalizados
 
 	@Override
@@ -137,7 +145,7 @@ public class Pokemon {
 			 + "  Def. Especial: " + defEsp + "\n"
 			 + "  Velocidad: " + vel + "\n\n"
 			 + "  Movimientos: " + "\n\n"
-			 + "  " + movPokemon
+			 + movPokemon
 			 + "\n╚═════════ ∘◦ " + nombre + " ◦∘ ══════════╝\n";
 		
 	}
@@ -174,26 +182,20 @@ public class Pokemon {
 		
 	}
 	
-	private String mostrarMov () {
+	private String mostrarMov() {
 		
-		String movPokemon = "";
-		
-		for (int i = 0;i < movimientos.size();i++) {
-						
-			if (i == 0) {
-				
-				movPokemon += "-> [" + movimientos.get(i).getPp() + "] - " + movimientos.get(i).getNombre() + "\n";
-				
-			} else {
-				
-				movPokemon += "  -> [" + movimientos.get(i).getPp() + "] - " + movimientos.get(i).getNombre() + "\n";
-	
-			}
-			
-		}
-		
-		return movPokemon;
-		
+	    StringBuilder movPokemon = new StringBuilder();
+
+	    for (int i = 0; i < movimientos.size(); i++) {
+
+	        String linea = String.format("  [%2d] - %-16s%n",movimientos.get(i).getPp(),movimientos.get(i).getNombre());
+	        
+	        movPokemon.append(linea);
+	        
+	    }
+
+	    return movPokemon.toString();
+	    
 	}
 	
 	public void agregarMovimiento (Movimiento m) {
