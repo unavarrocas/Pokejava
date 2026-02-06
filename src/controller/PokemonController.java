@@ -150,7 +150,34 @@ public class PokemonController {
 				
 				pv.mostrarMoviminetosConPPDiponibles(rapido, ppAliado);
 				
-				int numMov = pv.seleccionarMovimiento();
+				// Se comprueba que el movimiento que se quiere usar existe y esta disponible (Tiene 1 PP restante o mas)
+				
+				int numMov = -1;
+				
+				while (numMov == -1) {
+					
+					numMov = pv.seleccionarMovimiento();
+					
+					if (numMov == -1) {
+						
+						System.out.println("\n  Seleccione un movimiento existente.");
+						
+					}
+					
+					try {
+						
+						if (ppAliado[numMov] < 1) {
+							
+							System.out.println("\n  No quedan mas PPs!");
+							numMov = -1;
+							
+						}
+						
+					} catch (ArrayIndexOutOfBoundsException e) {
+						
+					}
+					
+				}
 				
 				resAtq = realizarDmg(rapido,lento,pokeAliado.getMovimientos().get(numMov));
 				

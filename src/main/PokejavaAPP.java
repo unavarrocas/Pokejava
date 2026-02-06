@@ -1,14 +1,12 @@
 package main;
 
-import java.sql.SQLException;
-
 import controller.PokemonController;
 import dao.PokemonDAO;
 import view.PokemonView;
 
 public class PokejavaAPP {
 
-	public static void main(String[] args) throws SQLException {
+	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
 	    PokemonView pv = new PokemonView();

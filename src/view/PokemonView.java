@@ -77,17 +77,17 @@ public class PokemonView {
 		
 			case 1:
 				
-				System.out.println("  Escriba el nombre del pokemon: ");
+				System.out.print("  Escriba el nombre del pokemon: ");
 				return sc.nextLine();
 				
 			case 2:
 				
-				System.out.println("  Escriba el nombre del pokemon ALIADO: ");
+				System.out.print("  Escriba el nombre del pokemon ALIADO: ");
 				return sc.nextLine();
 				
 			case 3:
 				
-				System.out.println("  Escriba el nombre del pokemon RIVAL: ");
+				System.out.print("  Escriba el nombre del pokemon RIVAL: ");
 				return sc.nextLine();
 				
 			default:
@@ -100,7 +100,7 @@ public class PokemonView {
 	
 	public int pedirOpcionMenu () {
 		
-		System.out.println("  Elija una opcion: ");
+		System.out.print("  Elija una opcion: ");
 		
 		try {
 			
@@ -170,7 +170,7 @@ public class PokemonView {
 		
 		int numMov;
 		
-		System.out.println("\n  Elija el movimiento que va a usar: ");
+		System.out.print("\n  Elija el movimiento que va a usar: ");
 		numMov = Integer.parseInt(sc.nextLine());
 		
 		if (numMov < 0 || numMov > 4) {
@@ -189,7 +189,9 @@ public class PokemonView {
 		
 		for (int i = 0;i < p.getMovimientos().size();i++) {
 			
-			System.out.printf("  ⟅" + (i + 1) + "⟆ [%2d] - %-16s%n",pps[i],p.getMovimientos().get(i).getNombre());
+			String tipoHabilidad = p.getMovimientos().get(i).tipoMovimientoColor();
+			
+			System.out.printf("  ⟅" + (i + 1) + "⟆ %-16s (" + tipoHabilidad + ") - [%2d/" + p.getMovimientos().get(i).getPp() + "]%n",p.getMovimientos().get(i).getNombre(),pps[i]);
 			
 		}
 		
@@ -209,7 +211,7 @@ public class PokemonView {
 	
 	public void enterParaContinuar () {
 		
-		System.out.println("\n  -> Pulsa enter para continuar...");
+		System.out.print("\n  -> Pulsa enter para continuar...");
 		sc.nextLine();
 		
 	}
