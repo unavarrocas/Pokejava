@@ -28,6 +28,13 @@ public class PokemonController {
     public static final int ALIADO = 2;
     public static final int RIVAL = 3;
     
+    // Declaracion de constantes para las salidas del menu y submenus
+    
+    public static final int GENERAL = 1;
+    public static final int POKEMONS = 2;
+    public static final int EQUIPOS = 3;
+    public static final int MOVIMIENTOS = 4;
+    
     // Menu principal con el arraque
     
     public void arranquePrograma () throws SQLException {
@@ -42,23 +49,45 @@ public class PokemonController {
 			
 			switch (opcionMenu) {
 			
-				case 1 -> mostrarTodos();
-				case 2 -> mostrarPokemonNombre();
-				case 3 -> batallaIndividual();
+				case 1 -> submenuPokemons();
+				case 2 -> submenuEquipos();
+				case 3 -> submenuMovimientos();
 				/*case 4 -> ;
 				case 5 -> ;
 				case 6 -> ;
-				case 7 -> ;
-				case 8 -> ;
-				case 9 -> ;*/
-				default -> salidaMenu(opcionMenu);
+				case 7 -> ;*/
+				default -> salidaMenu(opcionMenu,GENERAL);
 			}
 			
 		}
     	
     }
 	
-	// OPCION 1: MOSTRAR TODOS LOS POKEMONS
+	// OPCION 1: SUBMENU POKEMONS
+    
+    public void submenuPokemons () throws SQLException {
+    	
+    	int opcionMenu = -1;
+    	
+    	while (opcionMenu != 0) {
+    		
+    		pv.mostrarMenuPokemons();
+    		
+    		opcionMenu = pv.pedirOpcionMenu();
+    		
+    		switch (opcionMenu) {
+    		
+    			case 1 -> mostrarTodos();
+    			case 2 -> mostrarPokemonNombre();
+    			case 3 -> mostrarPokemonsTipo();
+    			case 4 -> mostrarPokemonsMinStat();
+    			default -> salidaMenu(opcionMenu, POKEMONS);
+    		
+    		}
+    		
+    	}
+    	
+    }
 	
 	public void mostrarTodos () throws SQLException {
 		
@@ -67,14 +96,68 @@ public class PokemonController {
 		
 	}
 	
-	// OPCION 2: MOSTRAR POKEMON INDICADO POR EL USUARIO
-	
 	public void mostrarPokemonNombre () throws SQLException {
 		
 		pv.mostrarPokemonNombre(dao.mostrarPokemonNombre(pv.pedirNombrePokemon(GENERICO)));
 		
 	}
 	
+	public void mostrarPokemonsTipo () throws SQLException {
+		
+		pv.mostrarPokemonsTipo(dao.mostrarPokemonsTipo(pv.pedirTipoPokemon()));
+		
+	}
+	
+	public void mostrarPokemonsMinStat () throws SQLException {
+		
+		pv.mostrarPokemonsMinStat(dao.mostrarPokemonsMinStat(pv.pedirNombreStat(), pv.pedirMinNumStat()));
+		
+	}
+	
+	// OPCION 2: SUBMENU EQUIPOS
+    
+    public void submenuEquipos () throws SQLException {
+    	
+    	int opcionMenu = -1;
+    	
+    	while (opcionMenu != 0) {
+    		
+    		switch (opcionMenu) {
+    		
+    			/*case 1 -> ;
+    			case 2 -> ;
+    			case 3 -> ;
+    			case 4 -> ;
+    			case 5 -> ;*/
+    			default -> salidaMenu(opcionMenu, EQUIPOS);
+    		
+    		}
+    		
+    	}
+    	
+    }
+    
+	// OPCION 3: SUBMENU MOVIMIENTOS
+    
+    public void submenuMovimientos () throws SQLException {
+    	
+    	int opcionMenu = -1;
+    	
+    	while (opcionMenu != 0) {
+    		
+    		switch (opcionMenu) {
+    		
+    			/*case 1 -> ;
+    			case 2 -> ;
+    			case 3 -> ;*/
+    			default -> salidaMenu(opcionMenu, MOVIMIENTOS);
+    		
+    		}
+    		
+    	}
+    	
+    }
+
 	// OPCION 3: PELEA 1vs1
 	
 	public void batallaIndividual () throws SQLException {
@@ -168,7 +251,7 @@ public class PokemonController {
 						
 						if (ppAliado[numMov] < 1) {
 							
-							System.out.println("\n  No quedan mas PPs!");
+							pv.noQuedanPP();
 							numMov = -1;
 							
 						}
@@ -317,13 +400,7 @@ public class PokemonController {
 
 	// MENUS
 	
-	public void mostrarMenuPrincipal () {
-		
-		pv.mostrarMenuPrincipal();
-		
-	}
-	
-	public void salidaMenu (int opcionMenu) throws SQLException {
+	public void salidaMenu (int opcionMenu, int tipoMenu) throws SQLException {
 		
 		if (opcionMenu != 0) {
 			
@@ -331,7 +408,14 @@ public class PokemonController {
 			
 		} else {
 			
-			pv.finPrograma();
+			switch (tipoMenu) {
+			
+				case 1 -> pv.finPrograma(); // Fin programa completo
+				case 2 -> pv.salidaMenuPokemons(); // Salir submenu pokemons
+				case 3 -> pv.salidaMenuEquipos(); // Salir submenu equipos
+				case 4 -> pv.salidaMenuMovimientos(); // Salir submenu movimientos
+			
+			}
 			
 		}
 		

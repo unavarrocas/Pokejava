@@ -67,7 +67,7 @@ public class PokemonDAO {
 		    		
 		    		p.setId(rs.getInt("id"));
 		    		p.setNombre(rs.getString("nombre"));
-		    		p.setTipos(rs.getString("tipo").split("/")); // Se separa con el split para acomodarlos al String[2]
+		    		p.setTipos(rs.getString("tipo").split("/"));
 		    		p.setPs(rs.getDouble("ps"));
 		    		p.setAtq(rs.getDouble("ataque"));
 		    		p.setDef(rs.getDouble("defensa"));
@@ -92,6 +92,84 @@ public class PokemonDAO {
 		
 	}
 	
+	public List<Pokemon> mostrarPokemonsTipo (String tipo) throws SQLException {
+		
+		List<Pokemon> listaPokemons = new ArrayList<>();
+		
+		String sql = "SELECT * FROM pokemons WHERE tipo LIKE ?";
+		
+		try (Connection con = ConexionDB.getConexion();
+			PreparedStatement ps = con.prepareStatement(sql)) {
+			
+			ps.setString(1, "%" + tipo + "%");
+			
+			try (ResultSet rs = ps.executeQuery()) {
+				
+				while (rs.next()) {
+					
+		    		Pokemon p = new Pokemon();
+		    		
+		    		p.setId(rs.getInt("id"));
+		    		p.setNombre(rs.getString("nombre"));
+		    		p.setTipos(rs.getString("tipo").split("/"));
+		    		p.setPs(rs.getDouble("ps"));
+		    		p.setAtq(rs.getDouble("ataque"));
+		    		p.setDef(rs.getDouble("defensa"));
+		    		p.setAtEsp(rs.getDouble("at_especial"));
+		    		p.setDefEsp(rs.getDouble("def_especial"));
+		    		p.setVel(rs.getDouble("velocidad"));
+		    		
+		    		listaPokemons.add(p);
+					
+				}
+				
+			}
+			
+		}
+		
+		return listaPokemons;
+		
+	}
+	
+	public List<Pokemon> mostrarPokemonsMinStat (String stat, double minStat) throws SQLException {
+		
+		List<Pokemon> listaPokemons = new ArrayList<>();
+		
+		String sql = "SELECT * FROM pokemons WHERE " + stat + " >= ?";
+		
+		try (Connection con = ConexionDB.getConexion();
+			PreparedStatement ps = con.prepareStatement(sql)) {
+		
+			ps.setDouble(1, minStat);
+			
+			try (ResultSet rs = ps.executeQuery()) {
+				
+				while (rs.next()) {
+					
+		    		Pokemon p = new Pokemon();
+		    		
+		    		p.setId(rs.getInt("id"));
+		    		p.setNombre(rs.getString("nombre"));
+		    		p.setTipos(rs.getString("tipo").split("/"));
+		    		p.setPs(rs.getDouble("ps"));
+		    		p.setAtq(rs.getDouble("ataque"));
+		    		p.setDef(rs.getDouble("defensa"));
+		    		p.setAtEsp(rs.getDouble("at_especial"));
+		    		p.setDefEsp(rs.getDouble("def_especial"));
+		    		p.setVel(rs.getDouble("velocidad"));
+		    		
+		    		listaPokemons.add(p);
+					
+				}
+				
+			}
+			
+		}
+		
+		return listaPokemons;
+		
+	}
+	
 	public void cargarMovimientos (Pokemon p) throws SQLException {
 		
 		String sql = "SELECT m.* FROM movimientos m " +
@@ -99,7 +177,7 @@ public class PokemonDAO {
                 "WHERE pm.pokemon_id = ?";
 		
 		try (Connection con = ConexionDB.getConexion();
-				PreparedStatement ps = con.prepareStatement(sql)) {
+			PreparedStatement ps = con.prepareStatement(sql)) {
 			
 			ps.setInt(1, p.getId());
 					

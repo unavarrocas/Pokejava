@@ -17,6 +17,12 @@ public class PokemonView {
         this.sc = new Scanner(System.in); // Scanner declarado sin static
 
     }
+    
+    // Declaracion de constantes para los syso del view
+    
+    public static final int GENERICO = 1;
+    public static final int ALIADO = 2;
+    public static final int RIVAL = 3;
 	
 	// OPCION 1: LISTAR TODOS LOS POKEMONS
 	
@@ -43,7 +49,57 @@ public class PokemonView {
 
 	public void mostrarPokemonNombre (Pokemon p) {
 		
-		System.out.println(p.pokemonToString());
+		if (p == null) {
+			
+			errorNoExisteElPokemon(GENERICO);
+			
+		} else {
+			
+			System.out.println(p.pokemonToString());
+			
+		}
+		
+	}
+	
+	// OPCION 3: MOSTRAR POKEMON POR TIPO INDICADO POR EL USUARIO
+	
+	public void mostrarPokemonsTipo (List<Pokemon> listaPokemons) {
+	    	
+		if (listaPokemons.isEmpty()) {
+			
+			errorNoExisteElTipo();
+			
+			return;
+			
+		}
+		
+		for (Pokemon p : listaPokemons) {
+				
+			String tiposStr = String.join(", ", p.getTipos());
+		    System.out.printf("  Nº%-3d - Nombre: %-12s - Tipo/s: %-19s - Estadisticas [PS: %-5.1f | Atq: %-5.1f | Def: %-5.1f | At.Esp: %-5.1f | Def.Esp: %-5.1f | Vel: %-5.1f]%n",p.getId(),p.getNombre(),tiposStr,p.getPs(),p.getAtq(),p.getDef(),p.getAtEsp(),p.getDefEsp(),p.getVel());
+	    	
+	    }
+		
+	}
+	
+	// OPCION 4: MOSTRAR POKEMONS CON LA ESTADISTICA INDICADA SUPERIOR AL INDICADO
+	
+	public void mostrarPokemonsMinStat (List<Pokemon> listaPokemons) {
+		
+		if (listaPokemons.isEmpty()) {
+			
+			errorNoExisteLaStat();
+			
+			return;
+			
+		}
+		
+		for (Pokemon p : listaPokemons) {
+			
+			String tiposStr = String.join(", ", p.getTipos());
+		    System.out.printf("  Nº%-3d - Nombre: %-12s - Tipo/s: %-19s - Estadisticas [PS: %-5.1f | Atq: %-5.1f | Def: %-5.1f | At.Esp: %-5.1f | Def.Esp: %-5.1f | Vel: %-5.1f]%n",p.getId(),p.getNombre(),tiposStr,p.getPs(),p.getAtq(),p.getDef(),p.getAtEsp(),p.getDefEsp(),p.getVel());
+	    	
+	    }
 		
 	}
 	
@@ -95,6 +151,53 @@ public class PokemonView {
 				return null;
 				
 		}
+		
+	}
+	
+	public String pedirTipoPokemon () {
+		
+		System.out.print("  Escriba el tipo del pokemon: ");
+		return sc.nextLine();
+		
+	}
+	
+	public String pedirNombreStat () {
+		
+		int opcionMenu = 0;
+		
+		while (opcionMenu == 0) {
+			
+			System.out.println("\n  ⟅1⟆ PS");
+			System.out.println("  ⟅2⟆ Ataque");
+			System.out.println("  ⟅3⟆ Defensa");
+			System.out.println("  ⟅4⟆ At. Especial");
+			System.out.println("  ⟅5⟆ Def. Especial");
+			System.out.println("  ⟅6⟆ Velocidad");
+			System.out.print("\n  Escriba la estadistica a consultar: ");
+			opcionMenu = Integer.parseInt(sc.nextLine());
+			
+			switch (opcionMenu) {
+			
+			case 1: return "ps";
+			case 2: return "ataque";
+			case 3: return "defensa";
+			case 4: return "at_especial";
+			case 5: return "def_especial";
+			case 6: return "velocidad";
+			default: opcionMenu = 0;
+		
+			}
+			
+		}
+		
+		return null;
+		
+	}
+	
+	public double pedirMinNumStat () {
+		
+		System.out.print("  Indique el minimo de la estadistica: ");
+		return Double.parseDouble(sc.nextLine());
 		
 	}
 	
@@ -216,26 +319,95 @@ public class PokemonView {
 		
 	}
 	
+	public void noQuedanPP () {
+		
+		System.out.println("\n  No quedan mas PPs!");
+		
+	}
+	
+	public void noExisteMovimiento () {
+		
+		System.out.println("\n  Seleccione un movimiento existente.");
+		
+	}
+	
 	// MENUS
 	
-	public void mostrarMenuPrincipal() {
-		// TODO Auto-generated method stub
+	public void mostrarMenuPrincipal () {
 		
 		System.out.println("\n╔═══════════════════ •●• ═══════════════════╗\n");
 		System.out.println("                   POKEJAVA");
 		System.out.println("                                       v1.0");
 		System.out.println("╠═══════════════════ •●• ═══════════════════╣\n");
-		System.out.println("  ⟅1⟆ Mostrar pokedex");
-		System.out.println("  ⟅2⟆ Mostrar pokemon por nombre");
-		System.out.println("  ⟅3⟆ Batalla 1vs1");
-		System.out.println("  ⟅4⟆ Mostrar todos los equipos");
-		System.out.println("  ⟅5⟆ Mostrar un equipo especifico");
-		System.out.println("  ⟅6⟆ Crear nuevo equipo");
-		System.out.println("  ⟅7⟆ Borrar un equipo");
-		System.out.println("  ⟅8⟆ Modificar un equipo");
-		System.out.println("  ⟅9⟆ Batalla entre equipos pokemon");
+		System.out.println("  ⟅1⟆ Menu pokemons");
+		System.out.println("  ⟅2⟆ Menu equipos");
+		System.out.println("  ⟅3⟆ Menu movimientos");
+		System.out.println("  ⟅4⟆ Batalla 1vs1 (Jugador VS Maquina)");
+		System.out.println("  ⟅5⟆ Batalla 1vs1 (Jugador VS Jugador)");
+		System.out.println("  ⟅6⟆ Batalla equipos (Jugador VS Maquina)");
+		System.out.println("  ⟅7⟆ Batalla equipos (Jugador VS Jugador)");
 		System.out.println("  ⟅0⟆ SALIR");
 		System.out.println("\n╚═══════════════════ •●• ═══════════════════╝\n");
+		
+	}
+	
+	// Submenus Pokemons
+	
+	public void mostrarMenuPokemons () {
+		
+		System.out.println("\n┌───────────── • POKEMONS • ─────────────┐\n");
+		System.out.println("  ⟅1⟆ Mostrar pokedex");
+		System.out.println("  ⟅2⟆ Mostrar pokemon por nombre");
+		System.out.println("  ⟅3⟆ Mostrar pokemons por tipo");
+		System.out.println("  ⟅4⟆ Mostrar pokemons por estadística");
+		System.out.println("  ⟅0⟆ VOLVER");
+		System.out.println("\n└───────────── • POKEMONS • ─────────────┘\n");
+		
+	}
+	
+	public void salidaMenuPokemons () {
+		
+		System.out.println("\n  [INFO] Submenu de pokemons cerrado.");
+		
+	}
+	
+	// Submenus Equipos
+	
+	public void mostrarMenuEquipos () {
+		
+		System.out.println("\n┌───────────── • EQUIPOS • ─────────────┐\n");
+		System.out.println("  ⟅1⟆ Mostrar equipos");
+		System.out.println("  ⟅2⟆ Mostrar equipo por nombre");
+		System.out.println("  ⟅3⟆ Crear nuevo equipo");
+		System.out.println("  ⟅4⟆ Modificar equipo");
+		System.out.println("  ⟅5⟆ Eliminar equipo");
+		System.out.println("  ⟅0⟆ VOLVER");
+		System.out.println("\n└───────────── • EQUIPOS • ─────────────┘\n");
+		
+	}
+	
+	public void salidaMenuEquipos () {
+		
+		System.out.println("\n  [INFO] Submenu de equipos cerrado.");
+		
+	}
+	
+	// Submenus Movimientos
+	
+	public void mostrarMenuMovimientos () {
+		
+		System.out.println("\n┌───────────── • MOVIMIENTOS • ─────────────┐\n");
+		System.out.println("  ⟅1⟆ Mostrar movimientos");
+		System.out.println("  ⟅2⟆ Mostrar movimientos por nombre");
+		System.out.println("  ⟅3⟆ Mostrar movimientos por tipo");
+		System.out.println("  ⟅0⟆ VOLVER");
+		System.out.println("\n└───────────── • MOVIMIENTOS • ─────────────┘\n");
+		
+	}
+	
+	public void salidaMenuMovimientos () {
+		
+		System.out.println("\n  [INFO] Submenu de movimientos cerrado.");
 		
 	}
 	
@@ -243,7 +415,7 @@ public class PokemonView {
 	
 	public void errorMain (String error) {
 		
-		System.out.println("  [ERROR] Ha habido un problema al arrancar el programa." + error);
+		System.out.println("  [ERROR] Ha habido un problema: " + error);
 		
 	}
 	
@@ -254,8 +426,6 @@ public class PokemonView {
 	}
 	
 	public void errorNoExisteElPokemon (int opcion) {
-		
-		System.out.println("  [ERROR] El pokemon introducido no existe.");
 		
 		switch (opcion) {
 		
@@ -281,11 +451,23 @@ public class PokemonView {
 		
 	}
 	
+	public void errorNoExisteElTipo () {
+		
+		System.out.println("\n  [ERROR] El tipo introducido no existe.");
+		
+	}
+	
+	public void errorNoExisteLaStat () {
+		
+		System.out.println("\n  [ERROR] La stat indicada no existe.");
+		
+	}
+	
 	// MENSAJE DE FIN DE PROGRAMA
 	
 	public void finPrograma () {
 		
-		System.out.println("  GRACIAS POR JUGAR! (ദ്ദി˙ᗜ˙)\n");
+		System.out.println("\n  GRACIAS POR JUGAR! (ദ്ദി˙ᗜ˙)");
 		
 	}
 
