@@ -173,8 +173,8 @@ public class PokemonDAO {
 	public void cargarMovimientos (Pokemon p) throws SQLException {
 		
 		String sql = "SELECT m.* FROM movimientos m " +
-                "JOIN pokemon_movimientos pm ON m.id = pm.movimiento_id " +
-                "WHERE pm.pokemon_id = ?";
+                "JOIN pokemon_movimientos pm ON m.id = pm.id_movimiento " +
+                "WHERE pm.id_pokemon = ?";
 		
 		try (Connection con = ConexionDB.getConexion();
 			PreparedStatement ps = con.prepareStatement(sql)) {
